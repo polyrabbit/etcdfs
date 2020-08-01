@@ -1,0 +1,26 @@
+project_name: etcdfs
+release:
+  github:
+    owner: polyrabbit
+    name: etcdfs
+builds:
+  - goos:
+      - linux
+      - darwin
+    goarch:
+      - amd64
+    ldflags:
+      - -s -w -X github.com/polyrabbit/etcdfs/config.Rev={{.ShortCommit}} -X github.com/polyrabbit/etcdfs/config.Version={{.Version}}
+archives:
+- replacements:
+    amd64: x86_64
+checksum:
+  name_template: 'checksums.txt'
+snapshot:
+  name_template: "{{ .Tag }}-next"
+changelog:
+  sort: asc
+  filters:
+    exclude:
+    - '^docs:'
+    - '^test:'
