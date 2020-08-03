@@ -11,7 +11,7 @@ Tired of typing `etcdctl`? why not mount it to local filesystem and open in your
 
 Wondering how Kubernetes organizes data in etcd? After mounting it locally, we can use [VS Code](https://code.visualstudio.com/) to get the whole picture:
 
-![etcd-of-a-kubernetes](https://user-images.githubusercontent.com/2657334/88920326-36d84e80-d29f-11ea-93c9-8e5d1fbd4a56.png)
+![etcd-of-a-kubernetes](https://user-images.githubusercontent.com/2657334/89164446-b6b92e00-d5a9-11ea-93b9-218072ce73ff.png)
 
 _Hint: steps to mount Kubernetes etcd locally:_
 
