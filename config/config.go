@@ -37,7 +37,7 @@ const (
 var (
 	rootCmd = &cobra.Command{
 		Use:   fmt.Sprintf("%s [mount-point]", os.Args[0]),
-		Short: "Mount etcd to local file system - find help/update from https://github.com/polyrabbit/etcdfs",
+		Short: "Mount etcd to local file system - find help/update at https://github.com/polyrabbit/etcdfs",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if len(args) != 1 {
 				return cmd.Help()
