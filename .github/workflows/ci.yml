@@ -1,13 +1,21 @@
-name: ci
+name: Tests
 on: [push, pull_request]
 jobs:
   test:
-    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         os:
           - ubuntu-latest
 #          - macOS-latest
+    runs-on: ${{ matrix.os }}
+    services:
+      mysql:
+        image: bitnami/etcd:3
+        env:
+          ALLOW_NONE_AUTHENTICATION: "yes"
+        ports:
+          - 2379:2379
+
     steps:
       - name: Checkout
         uses: actions/checkout@master
@@ -19,8 +27,25 @@ jobs:
         with:
           go-version: '^1'
 
-      - name: UT
+      - name: Unit test
         run: go test -v -race -coverprofile=coverage.txt -covermode=atomic ./...
+
+      - name: Integration test
+        run: |
+          go build .
+          mkdir mnt
+          ./etcdfs
+          ./etcdfs mnt &
+          ls -al
+          timeout 20 sh -c 'until mountpoint mnt; do echo "not started yet"; sleep 3s; done'
+          ls -al mnt
+          echo content >mnt/aa
+          ls -al mnt
+          cat mnt/aa | grep content
+          stat mnt/aa
+          rm mnt/aa
+          sudo umount mnt
+          git clean -fd # GoReleaser needs a clean workspace
 
       - name: GoReleaser
         uses: goreleaser/goreleaser-action@v2

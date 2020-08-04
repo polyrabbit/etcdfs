@@ -1,9 +1,11 @@
 # etcdfs - A FUSE filesystem backed by etcd
 
-[![ci](https://github.com/polyrabbit/etcdfs/workflows/ci/badge.svg)](https://github.com/polyrabbit/etcdfs/actions)
+[![Tests](https://github.com/polyrabbit/etcdfs/workflows/Tests/badge.svg)](https://github.com/polyrabbit/etcdfs/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-brightgreen.svg)](https://opensource.org/licenses/MIT)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/polyrabbit/my-token/pulls)
 [![Go Report Card](https://goreportcard.com/badge/github.com/polyrabbit/etcdfs)](https://goreportcard.com/report/github.com/polyrabbit/etcdfs)
+
+[中文简介](https://blog.betacat.io/post/2020/08/how-to-mount-etcd-as-a-filesystem/)
 
 Tired of typing `etcdctl`? why not mount it to local filesystem and open in your favorite editors?
 
@@ -80,7 +82,7 @@ _Notice: `etcdfs` has a very similar CLI syntax to `etcdctl`._
 - [ ] Support hierarchy separators other than `/` in etcd
 - [ ] Watch for file/directory changes
 
-### Credits
+## Credits
 
  * Inspired by [rssfs](https://github.com/dertuxmalwieder/rssfs)
  * Based on [go-fuse](https://github.com/hanwen/go-fuse) binding
