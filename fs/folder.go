@@ -44,7 +44,7 @@ type Node struct {
 	content []byte       // Internal buffer to hold the current file content
 }
 
-// A root is just a file node, with inode sets to 1 and leaf sets to false
+// NewRoot returns a file node - acting as a root, with inode sets to 1 and leaf sets to false
 func NewRoot(client *etcd.Client) *Node {
 	return &Node{
 		client: client,
@@ -54,7 +54,7 @@ func NewRoot(client *etcd.Client) *Node {
 
 // List keys under a certain prefix from etcd, and output the next hierarchy level
 func (n *Node) Readdir(ctx context.Context) (fs.DirStream, syscall.Errno) {
-	parent := n.absPath("")
+	parent := n.resolve("")
 	logrus.WithField("path", parent).Debug("Node Readdir")
 
 	entrySet := make(map[string]fuse.DirEntry)
@@ -86,7 +86,7 @@ func (n *Node) Readdir(ctx context.Context) (fs.DirStream, syscall.Errno) {
 		// For a flat kv structure, we dont need to iterate all, eg.
 		// /foo/1, /foo/2, /foo/3, /foo/4, /foo/5, /bar/1, /bar/2
 		// when we find "/foo/1", we can skip all "/foo/xxx" folders and jump directly to "/bar/1"
-		nextGroup = v3.GetPrefixRangeEnd(n.absPath(lastName)) // TODO: new path should end with "/"?
+		nextGroup = v3.GetPrefixRangeEnd(n.resolve(lastName)) // TODO: new path should end with "/"?
 
 		if !moreKeys || len(keys) == 0 {
 			break
@@ -112,13 +112,14 @@ func (n *Node) nextHierarchyLevel(path, parent string) (string, bool) {
 	return filepath.Clean(hierarchies[0]), len(hierarchies) >= 2
 }
 
-func (n *Node) absPath(fileName string) string {
+// resolve acts as `filepath.Join`, but we want the '/' separator always
+func (n *Node) resolve(fileName string) string {
 	return n.path + string(filepath.Separator) + fileName
 }
 
-// Find a file under the current node(directory)
+// Lookup finds a file under the current node(directory)
 func (n *Node) Lookup(ctx context.Context, name string, out *fuse.EntryOut) (*fs.Inode, syscall.Errno) {
-	fullPath := n.absPath(name)
+	fullPath := n.resolve(name)
 	logrus.WithField("path", fullPath).Debug("Node Lookup")
 	keys, _, err := n.client.ListKeys(ctx, fullPath, v3.WithLimit(1))
 	if err != nil {
@@ -167,7 +168,7 @@ func (n *Node) Getattr(ctx context.Context, fh fs.FileHandle, out *fuse.AttrOut)
 // Hash file path into inode number, so we can ensure the same file always gets the same inode number
 func (n *Node) inodeHash(path string) uint64 {
 	h := fnv.New64a()
-	h.Write([]byte(path))
+	_, _ = h.Write([]byte(path))
 	return h.Sum64()
 }
 

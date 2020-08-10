@@ -76,6 +76,22 @@ _Notice: `etcdfs` has a very similar CLI syntax to `etcdctl`._
 * Keys in etcd should have a hierarchical structure to fit the filesystem tree model. And currently the only supported hierarchy separator is `/` (the same as *nix), more will be supported in the future. 
 * Currently only etcd v3 is supported.
 
+## Supported Operations
+
+Most commonly used POSIX operations are supported:
+
+* Readdir
+* Lookup
+* Getattr
+* Open
+* Read
+* Write
+* Create
+* Flush
+* Fsync
+* Unlink
+* Setattr
+
 ## TODO
 
 - [x] ~~When building a directory, all keys belonging to that directory can be skipped~~

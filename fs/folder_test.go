@@ -68,8 +68,8 @@ func TestNode_absPath(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			n := &Node{path: tt.args.parent}
-			if got := n.absPath(tt.args.fileName); got != tt.want {
-				t.Errorf("absPath() = %v, want %v", got, tt.want)
+			if got := n.resolve(tt.args.fileName); got != tt.want {
+				t.Errorf("resolve() = %v, want %v", got, tt.want)
 			}
 		})
 	}
