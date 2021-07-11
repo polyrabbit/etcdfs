@@ -68,7 +68,7 @@ func init() {
 	rootCmd.Flags().StringVar(&KeyFile, "key", "", "identify secure client using this TLS key file")
 	rootCmd.Flags().StringVar(&TrustedCAFile, "cacert", "", "verify certificates of TLS-enabled secure servers using this CA bundle")
 
-	rootCmd.Flags().StringSliceVar(&MountOptions, "mount-options", []string{"nonempty"}, "options are passed as -o string to fusermount")
+	rootCmd.Flags().StringSliceVarP(&MountOptions, "mount-options", "o", nil, "options are passed as -o string to fusermount")
 
 	rootCmd.Flags().SortFlags = false
 	rootCmd.SilenceErrors = true
