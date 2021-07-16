@@ -56,7 +56,8 @@ func MustNew() *Client {
 func (c *Client) ListKeys(ctx context.Context, prefix string, opts ...v3.OpOption) ([]string, bool, error) {
 	defaultOpts := []v3.OpOption{v3.WithPrefix(), v3.WithKeysOnly(), v3.WithSerializable()}
 	defaultOpts = append(defaultOpts, opts...)
-	ctx, _ = context.WithTimeout(ctx, config.CommandTimeOut)
+	ctx, cancel := context.WithTimeout(ctx, config.CommandTimeOut)
+	defer cancel()
 	resp, err := c.client.Get(ctx, prefix, defaultOpts...)
 	if err != nil {
 		return nil, false, err
@@ -71,7 +72,8 @@ func (c *Client) ListKeys(ctx context.Context, prefix string, opts ...v3.OpOptio
 func (c *Client) GetValue(ctx context.Context, key string, opts ...v3.OpOption) ([]byte, error) {
 	defaultOpts := []v3.OpOption{v3.WithSerializable()}
 	defaultOpts = append(defaultOpts, opts...)
-	ctx, _ = context.WithTimeout(ctx, config.CommandTimeOut)
+	ctx, cancel := context.WithTimeout(ctx, config.CommandTimeOut)
+	defer cancel()
 	resp, err := c.client.Get(ctx, key, defaultOpts...)
 	if err != nil {
 		return nil, err
@@ -83,13 +85,15 @@ func (c *Client) GetValue(ctx context.Context, key string, opts ...v3.OpOption) 
 }
 
 func (c *Client) PutValue(ctx context.Context, key string, value []byte, opts ...v3.OpOption) error {
-	ctx, _ = context.WithTimeout(ctx, config.CommandTimeOut)
+	ctx, cancel := context.WithTimeout(ctx, config.CommandTimeOut)
+	defer cancel()
 	_, err := c.client.Put(ctx, key, string(value), opts...)
 	return err
 }
 
 func (c *Client) DeleteKey(ctx context.Context, key string, opts ...v3.OpOption) error {
-	ctx, _ = context.WithTimeout(ctx, config.CommandTimeOut)
+	ctx, cancel := context.WithTimeout(ctx, config.CommandTimeOut)
+	defer cancel()
 	_, err := c.client.Delete(ctx, key, opts...)
 	return err
 }
