@@ -8,5 +8,5 @@ require (
 	github.com/spf13/cobra v0.0.3
 	go.etcd.io/etcd/v3 v3.3.0-rc.0.0.20200707003333-58bb8ae09f8e
 	go.uber.org/zap v1.14.1
-	golang.org/x/sys v0.0.0-20200720211630-cb9d2d5c5666 // indirect
+	golang.org/x/sys v0.1.0 // indirect
 )
